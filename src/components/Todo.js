@@ -35,7 +35,7 @@ const Todo = () => {
 
     const AddToDoHandler = () => {
         if (input_todo.name.length !== 0 && !input_todo.isEdit) {
-            setLocalStorage([...input_todo.Lists, input_todo.name], input_todo.name)
+            setLocalStorage([...input_todo.Lists, input_todo.name], '')
             setTodo({
                 name: '',
                 Lists: [...input_todo.Lists, input_todo.name],
