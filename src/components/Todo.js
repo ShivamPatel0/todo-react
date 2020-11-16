@@ -1,6 +1,6 @@
 import TodoList from './TodoList';
 import AddEditTodo from './AddEditTodo';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -14,7 +14,20 @@ const Todo = () => {
             index: 0
         }
     );
+
+    useEffect(() => {
+        debugger
+        if (localStorage.getItem('Lists') !== null && localStorage.getItem('Lists').length !== 0) {
+            setTodo({
+                name: localStorage.getItem('name'),
+                Lists: [...localStorage.getItem('Lists').split(',')],
+                isEdit: false,
+                index: 0
+            })
+        }
+    }, []);
     const setTodoHandler = (event) => {
+        setLocalStorageForTodoName(event.target.value);
         setTodo({
             name: event.target.value,
             Lists: [...input_todo.Lists],
@@ -25,6 +38,7 @@ const Todo = () => {
 
     const AddToDoHandler = () => {
         if (input_todo.name.length !== 0 && !input_todo.isEdit) {
+            setLocalStorage([...input_todo.Lists,input_todo.name])
             setTodo({
                 name: '',
                 Lists: [...input_todo.Lists, input_todo.name],
@@ -47,6 +61,9 @@ const Todo = () => {
         if (window.confirm('Do you really want to delete this?')) {
             const data = input_todo.Lists;
             data.splice(index, 1);
+
+            setLocalStorage(data);
+
             setTodo({
                 name: input_todo.name,
                 Lists: [...data],
@@ -64,6 +81,15 @@ const Todo = () => {
             index: index
         })
     }
+    const setLocalStorage = (Lists) => {
+        localStorage.setItem("name", '');
+        localStorage.setItem("Lists", [...Lists]);
+        localStorage.setItem("isEdit", false);
+        localStorage.setItem("index", 0);
+    }
+
+    const setLocalStorageForTodoName = name => localStorage.setItem("name", name);
+
     return (
         <Container>
             <Row>
